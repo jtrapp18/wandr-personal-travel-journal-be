@@ -24,9 +24,16 @@ app.get('/', async (req, res) => {
     const sql = `
       SELECT 
         trips.id AS trip_id,
-        trips.*,
-        GROUP_CONCAT(DISTINCT attendees.*) AS attendees,
-        GROUP_CONCAT(DISTINCT photos.*) AS photos
+        trips.trip_location,
+        trips.trip_description,
+        trips.image,
+        trips.start_date,
+        trips.end_date,
+        trips.review_title,
+        trips.rating,
+        trips.review_description,
+        GROUP_CONCAT(DISTINCT attendees.attendee_name) AS attendees,
+        GROUP_CONCAT(DISTINCT photos.photo_url) AS photos
       FROM trips
       LEFT JOIN attendees ON trips.id = attendees.trip_id
       LEFT JOIN photos ON trips.id = photos.trip_id
