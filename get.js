@@ -12,7 +12,7 @@ const dbConfig = {
   uri: process.env.MYSQL_URL, // Use the Railway-provided MYSQL_URL
 };
 
-app.get('/', async (req, res) => {
+app.get('/trips', async (req, res) => {
   let db;
   const userId = req.query.userId; // Extract userId safely
 
