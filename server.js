@@ -24,21 +24,14 @@ app.get('/', async (req, res) => {
     const sql = `
       SELECT 
         trips.id AS trip_id,
-        trips.trip_location,
-        trips.trip_description,
-        trips.image,
-        trips.start_date,
-        trips.end_date,
-        trips.review_title,
-        trips.rating,
-        trips.review_description,
-        JSON_ARRAYAGG(DISTINCT attendees.attendee_name) AS attendees,
-        JSON_ARRAYAGG(DISTINCT photos.photo_url) AS photos
+        trips.*,
+        GROUP_CONCAT(DISTINCT attendees.*) AS attendees,
+        GROUP_CONCAT(DISTINCT photos.*) AS photos
       FROM trips
       LEFT JOIN attendees ON trips.id = attendees.trip_id
       LEFT JOIN photos ON trips.id = photos.trip_id
       WHERE trips.user_id = ?
-      GROUP BY trips.id, trips.trip_location, trips.trip_description, trips.image, trips.start_date, trips.end_date, trips.review_title, trips.rating, trips.review_description;
+      GROUP BY trips.id;
     `;
 
     const [rows] = await db.execute(sql, [userId]);
