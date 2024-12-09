@@ -19,7 +19,7 @@ router.get('/', async (req, res) => {
     // Query string
     const sql = `
       SELECT 
-        trips.id AS trip_id,
+        trips.id AS id,
         trips.trip_location,
         trips.trip_description,
         trips.image,
