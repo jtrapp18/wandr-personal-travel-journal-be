@@ -12,7 +12,7 @@ const dbConfig = {
 // List of allowed database tables
 const allowedTables = ['users', 'activities', 'attendees', 'photos', 'trips'];
 
-router.post('/new/:dbKey', async (req, res) => {
+router.post('/:dbKey', async (req, res) => {
   const { dbKey } = req.params;
   const jsonObj = req.body;
 

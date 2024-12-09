@@ -14,7 +14,7 @@ app.use(cors({
 app.use(express.json()); // Parse JSON in request body
 
 // Mount routes here
-app.use('/get', getRoutes);
+app.use('/trips', getRoutes);
 app.use('/post', postRoutes);
 app.use('/patch', patchRoutes);
 
