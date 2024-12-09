@@ -1,7 +1,5 @@
 const express = require('express');
 const mysql = require('mysql2/promise');
-
-const express = require('express');
 const cors = require('cors'); // Import the cors package
 
 const app = express();
