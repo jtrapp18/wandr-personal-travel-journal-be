@@ -21,17 +21,6 @@ app.get('/', async (req, res) => {
     db = await mysql.createConnection(dbConfig.uri);
 
     // Query string
-    // const sql = `
-    //   SELECT * 
-    //   FROM users
-    //   INNER JOIN trips ON users.id = trips.user_id
-    //   LEFT JOIN activities ON trips.id = activities.trip_id
-    //   LEFT JOIN attendees ON trips.id = attendees.trip_id
-    //   LEFT JOIN photos ON trips.id = photos.trip_id
-    //   WHERE users.id = ?
-    // `;
-
-    // Query string
     const sql = `
       SELECT 
         trips.id AS trip_id,
@@ -43,11 +32,9 @@ app.get('/', async (req, res) => {
         trips.review_title,
         trips.rating,
         trips.review_description,
-        GROUP_CONCAT(DISTINCT activities.activity) AS activities,
-        GROUP_CONCAT(DISTINCT attendees.attendee_name) AS attendees,
-        GROUP_CONCAT(DISTINCT photos.photo_url) AS photos
+        JSON_ARRAYAGG(DISTINCT attendees.attendee_name) AS attendees,
+        JSON_ARRAYAGG(DISTINCT photos.photo_url) AS photos
       FROM trips
-      LEFT JOIN activities ON trips.id = activities.trip_id
       LEFT JOIN attendees ON trips.id = attendees.trip_id
       LEFT JOIN photos ON trips.id = photos.trip_id
       WHERE trips.user_id = ?
