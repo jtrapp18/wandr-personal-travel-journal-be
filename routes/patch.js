@@ -23,6 +23,8 @@ router.patch('/:dbKey/:id', async (req, res) => {
   }
 
   let db;
+
+  
   try {
     // Establish database connection
     db = await mysql.createConnection(dbConfig.uri);
@@ -53,7 +55,7 @@ router.patch('/:dbKey/:id', async (req, res) => {
 
     return res.status(200).json({ message: 'Record updated successfully', updatedFields: fieldsToUpdate });
   } catch (error) {
-    console.error('Error running query:', error, { query, values });
+    console.error('Error running query:', error);
     return res.status(500).json({ error: 'Internal server error' });
   } finally {
     if (db) {
