@@ -5,6 +5,7 @@
   "main": "index.js",
   "dependencies": {
       "axios": "^1.7.2",
+      "cors": "^2.x.x",
       "express": "^4.x.x",
       "mysql2": "^2.x.x"
   },

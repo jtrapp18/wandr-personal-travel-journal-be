@@ -1,15 +1,20 @@
 const express = require('express');
 const mysql = require('mysql2/promise');
 
+const express = require('express');
+const cors = require('cors'); // Import the cors package
+
 const app = express();
 const port = process.env.PORT || 3000;
+
+app.use(cors());
 
 // Database connection details through environment variable
 const dbConfig = {
   uri: process.env.MYSQL_URL, // Use the Railway-provided MYSQL_URL
 };
 
-app.get('/user-data', async (req, res) => {
+app.get('/', async (req, res) => {
   let db;
   const userId = req.query.userId; // Extract userId safely
 
