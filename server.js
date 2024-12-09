@@ -1,6 +1,7 @@
 const express = require('express');
 const cors = require('cors');
 const tripsRoutes = require('./routes/trips');
+const activitiesRoutes = require('./routes/activities');
 const postRoutes = require('./routes/post');
 const patchRoutes = require('./routes/patch');
 
@@ -13,6 +14,7 @@ app.use(express.json());
 
 // Mount routes here
 app.use('/trips', tripsRoutes);
+app.use('/activities', activitiesRoutes);
 app.use('/new', postRoutes);
 app.use('/update', patchRoutes);
 
