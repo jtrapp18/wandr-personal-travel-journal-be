@@ -21,21 +21,13 @@ app.get('/', async (req, res) => {
     db = await mysql.createConnection(dbConfig.uri);
 
     // Query string
-    // const sql = `
-    //   SELECT * 
-    //   FROM users
-    //   INNER JOIN trips ON users.id = trips.user_id
-    //   LEFT JOIN activities ON trips.id = activities.trip_id
-    //   LEFT JOIN attendees ON trips.id = attendees.trip_id
-    //   LEFT JOIN photos ON trips.id = photos.trip_id
-    //   WHERE users.id = ?
-    // `;
-
-    // Query string
     const sql = `
       SELECT * 
       FROM users
       INNER JOIN trips ON users.id = trips.user_id
+      LEFT JOIN activities ON trips.id = activities.trip_id
+      LEFT JOIN attendees ON trips.id = attendees.trip_id
+      LEFT JOIN photos ON trips.id = photos.trip_id
       WHERE users.id = ?
     `;
 
