@@ -38,7 +38,7 @@ app.get('/', async (req, res) => {
       LEFT JOIN attendees ON trips.id = attendees.trip_id
       LEFT JOIN photos ON trips.id = photos.trip_id
       WHERE trips.user_id = ?
-      GROUP BY trips.id;
+      GROUP BY trips.id, trips.trip_location, trips.trip_description, trips.image, trips.start_date, trips.end_date, trips.review_title, trips.rating, trips.review_description;
     `;
 
     const [rows] = await db.execute(sql, [userId]);
