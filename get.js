@@ -1,18 +1,14 @@
 const express = require('express');
 const mysql = require('mysql2/promise');
-const cors = require('cors'); // Import the cors package
 
-const app = express();
-const port = process.env.PORT || 3000;
-
-app.use(cors());
+const router = express.Router();
 
 // Database connection details through environment variable
 const dbConfig = {
   uri: process.env.MYSQL_URL, // Use the Railway-provided MYSQL_URL
 };
 
-app.get('/trips', async (req, res) => {
+router.get('/trips', async (req, res) => {
   let db;
   const userId = req.query.userId; // Extract userId safely
 
@@ -54,7 +50,4 @@ app.get('/trips', async (req, res) => {
   }
 });
 
-// Start the server
-app.listen(port, () => {
-  console.log(`Server running on http://localhost:${port}`);
-});
+module.exports = router;

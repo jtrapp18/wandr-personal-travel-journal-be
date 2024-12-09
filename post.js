@@ -1,50 +1,58 @@
 const express = require('express');
 const mysql = require('mysql2/promise');
-const cors = require('cors');
 
-const app = express();
-const port = process.env.PORT || 3000;
-
-app.use(express.json());
-app.use(cors());
+const router = express.Router();
+router.use(express.json());
 
 // Database connection details through environment variable
 const dbConfig = {
   uri: process.env.MYSQL_URL,
 };
 
-// POST endpoint with dynamic dbKey routing
-app.post('/new/:dbKey', async (req, res) => {
+// List of allowed database tables
+const allowedTables = ['users', 'activities', 'attendees', 'photos', 'trips'];
+
+router.post('/new/:dbKey', async (req, res) => {
   const { dbKey } = req.params;
   const jsonObj = req.body;
+
+  // Validate database table key
+  if (!allowedTables.includes(dbKey)) {
+    return res.status(400).json({ error: 'Invalid database table' });
+  }
+
+  // Check database connection string
+  if (!dbConfig.uri) {
+    console.error('Missing database connection string');
+    return res.status(500).json({ error: 'Server misconfiguration' });
+  }
 
   let db;
   try {
     db = await mysql.createConnection(dbConfig.uri);
 
-    // Dynamically build table name and query
-    const tableKeys = ['users', 'activities', 'attendees', 'photos', 'trips']; // List of allowed table names
-    if (!tableKeys.includes(dbKey)) {
-      return res.status(400).json({ error: 'Invalid database table' });
-    }
-
+    // Dynamically build the query for insertion
     const fields = Object.keys(jsonObj).join(', ');
     const values = Object.values(jsonObj);
     const placeholders = values.map(() => '?').join(', ');
 
     const query = `INSERT INTO ${dbKey} (${fields}) VALUES (${placeholders})`;
 
+    console.log('Executing query:', { query, values });
+
     await db.execute(query, values);
 
-    res.status(200).json({ message: 'Data inserted successfully' });
+    return res.status(200).json({ message: 'Data inserted successfully' });
   } catch (error) {
     console.error('Error during query execution:', error);
-    res.status(500).json({ error: 'Internal server error' });
+
+    // Return the actual database error for debugging
+    return res.status(500).json({ error: error.message });
   } finally {
-    if (db) await db.end();
+    if (db) {
+      await db.end();
+    }
   }
 });
 
-app.listen(port, () => {
-  console.log(`Server running on http://localhost:${port}`);
-});
+module.exports = router;
