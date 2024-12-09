@@ -54,5 +54,5 @@ app.patch('/update/:dbKey/:id', async (req, res) => {
 });
 
 // Start server
-const port = process.env.PORT || 3000;
+const port = process.env.MYSQLPORT || 3000;
 app.listen(port, () => console.log(`Server running on port ${port}`));
