@@ -10,7 +10,7 @@ const dbConfig = {
 };
 
 // Whitelist of allowed tables
-const allowedTables = ['activities', 'attendees', 'photos'];
+const allowedTables = ['users', 'activities', 'attendees', 'photos', 'trips'];
 
 router.patch('/:dbKey/:id', async (req, res) => {
   const { dbKey, id } = req.params; // Extract table name and record ID from route params
