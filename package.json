@@ -10,7 +10,7 @@
       "mysql2": "^2.x.x"
   },
   "scripts": {
-    "start": "node server.js",
+    "start": "node get.js & post.js & patch.js",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "keywords": [],
