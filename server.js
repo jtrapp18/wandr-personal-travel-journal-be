@@ -21,14 +21,37 @@ app.get('/', async (req, res) => {
     db = await mysql.createConnection(dbConfig.uri);
 
     // Query string
+    // const sql = `
+    //   SELECT * 
+    //   FROM users
+    //   INNER JOIN trips ON users.id = trips.user_id
+    //   LEFT JOIN activities ON trips.id = activities.trip_id
+    //   LEFT JOIN attendees ON trips.id = attendees.trip_id
+    //   LEFT JOIN photos ON trips.id = photos.trip_id
+    //   WHERE users.id = ?
+    // `;
+
+    // Query string
     const sql = `
-      SELECT * 
-      FROM users
-      INNER JOIN trips ON users.id = trips.user_id
+      SELECT 
+        trips.id AS trip_id,
+        trips.trip_location,
+        trips.trip_description,
+        trips.image,
+        trips.start_date,
+        trips.end_date,
+        trips.review_title,
+        trips.rating,
+        trips.review_description,
+        GROUP_CONCAT(DISTINCT activities.activity) AS activities,
+        GROUP_CONCAT(DISTINCT attendees.attendee_name) AS attendees,
+        GROUP_CONCAT(DISTINCT photos.photo_url) AS photos
+      FROM trips
       LEFT JOIN activities ON trips.id = activities.trip_id
       LEFT JOIN attendees ON trips.id = attendees.trip_id
       LEFT JOIN photos ON trips.id = photos.trip_id
-      WHERE users.id = ?
+      WHERE trips.user_id = ?
+      GROUP BY trips.id;
     `;
 
     const [rows] = await db.execute(sql, [userId]);
