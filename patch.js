@@ -11,10 +11,10 @@ const dbConfig = {
 };
 
 // Whitelist of allowed tables
-const allowedTables = ['users', 'trips', 'activities', 'attendees', 'photos'];
+const allowedTables = ['activities', 'attendees', 'photos'];
 
-app.patch('/update/:dbKey', async (req, res) => {
-  const { dbKey } = req.params;
+app.patch('/update/:dbKey/:id', async (req, res) => {
+  const { dbKey, id } = req.params; // Extract table name and record ID from route params
 
   // Validate if the table is allowed
   if (!allowedTables.includes(dbKey)) {
@@ -33,15 +33,16 @@ app.patch('/update/:dbKey', async (req, res) => {
 
     const values = Object.values(fieldsToUpdate);
 
-    // Dynamically identify which record to patch based on an ID key
-    if (!req.body.id) {
-      return res.status(400).json({ error: 'ID is required for updates' });
-    }
-
+    // Ensure ID is explicitly included in the query
     const query = `UPDATE ${dbKey} SET ${setString} WHERE id = ?`;
-    values.push(req.body.id); // Add the record ID to the query values
+    values.push(id);
 
-    await db.execute(query, values);
+    // Execute the query with sanitized input
+    const [result] = await db.execute(query, values);
+
+    if (result.affectedRows === 0) {
+      return res.status(404).json({ error: 'No record found to update' });
+    }
 
     return res.status(200).json({ message: 'Record updated successfully' });
   } catch (error) {
