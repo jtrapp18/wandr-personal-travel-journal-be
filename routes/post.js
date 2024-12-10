@@ -33,13 +33,18 @@ router.post('/:dbKey', async (req, res) => {
     db = await mysql.createConnection(dbConfig.uri);
 
     // Dynamically build the query for insertion
-    const fields = Object.keys(jsonArr[0]).join(', ');
-    const placeholders = jsonArr
-    .map(() => `(${Object.keys(jsonArr[0]).map(() => '?').join(', ')})`).join(', ');
-    // const values = jsonArr.flatMap(Object.values);
-    const values = jsonArr.map(Object.values)
 
-    const query = `INSERT INTO ${dbKey} (${fields}) VALUES (${placeholders})`;
+    // Assume jsonArr is an array of objects representing the rows to be inserted
+    const fields = Object.keys(jsonArr[0]).join(', ');
+
+    // Create a placeholder string for each row
+    const placeholders = jsonArr.map(() => `(${Object.keys(jsonArr[0]).map(() => '?').join(', ')})`).join(', ');
+
+    // Flatten the values array to match the placeholder structure
+    const values = jsonArr.flatMap(Object.values);
+
+    const query = `INSERT INTO ${dbKey} (${fields}) VALUES ${placeholders}`;
+
 
     console.log('Executing query:', { query, values });
 
