@@ -42,7 +42,7 @@ router.post('/:dbKey', async (req, res) => {
 
     await db.execute(query, values);
 
-    return res.status(200).json({ message: 'Data inserted successfully' });
+    return res.status(200).json(result);
   } catch (error) {
     console.error('Error during query execution:', error);
 
