@@ -36,8 +36,8 @@ router.post('/:dbKey', async (req, res) => {
     const fields = Object.keys(jsonArr[0]).join(', ');
     const placeholders = jsonArr
     .map(() => `(${Object.values(jsonArr[0]).map(() => '?').join(', ')})`).join(', ');
-    const values = dataArray.flatMap(Object.values);
-    
+    const values = jsonArr.flatMap(Object.values);
+
     const query = `INSERT INTO ${dbKey} (${fields}) VALUES (${placeholders})`;
 
     console.log('Executing query:', { query, values });
