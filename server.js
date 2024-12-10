@@ -10,7 +10,7 @@ const app = express();
 const port = process.env.PORT || 8080;
 
 // List of allowed origins (including ports)
-const allowedOrigins = ['http://localhost:3000', 'http://https://jtrapp18.github.io/wandr-personal-travel-journal'];
+const allowedOrigins = ['http://localhost:3000', 'https://jtrapp18.github.io/wandr-personal-travel-journal'];
 
 // Configure CORS
 app.use(cors({
