@@ -15,6 +15,7 @@ const allowedTables = ['users', 'activities', 'attendees', 'photos', 'trips'];
 router.post('/:dbKey', async (req, res) => {
   const { dbKey } = req.params;
   const jsonObj = req.body;
+  const jsonArr = Array.isArray(jsonObj) ? jsonObj : [jsonObj];
 
   // Validate database table key
   if (!allowedTables.includes(dbKey)) {
@@ -32,10 +33,11 @@ router.post('/:dbKey', async (req, res) => {
     db = await mysql.createConnection(dbConfig.uri);
 
     // Dynamically build the query for insertion
-    const fields = Object.keys(jsonObj).join(', ');
-    const values = Object.values(jsonObj);
-    const placeholders = values.map(() => '?').join(', ');
-
+    const fields = Object.keys(jsonArr[0]).join(', ');
+    const placeholders = jsonArr
+    .map(() => `(${Object.values(jsonArr[0]).map(() => '?').join(', ')})`).join(', ');
+    const values = dataArray.flatMap(Object.values);
+    
     const query = `INSERT INTO ${dbKey} (${fields}) VALUES (${placeholders})`;
 
     console.log('Executing query:', { query, values });
