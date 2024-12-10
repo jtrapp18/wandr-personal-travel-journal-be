@@ -40,7 +40,7 @@ router.post('/:dbKey', async (req, res) => {
 
     console.log('Executing query:', { query, values });
 
-    await db.execute(query, values);
+    const [result] = await db.execute(query, values);
 
     return res.status(200).json(result);
   } catch (error) {
