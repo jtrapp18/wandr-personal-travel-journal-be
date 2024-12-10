@@ -20,12 +20,11 @@ router.get('/', async (req, res) => {
     const sql = `
       SELECT 
         activities.id AS id,
-        trips.id AS trip_id,
+        activities.trip_id,
         activities.activity,
         activities.activity_description,
         activities.activity_date,
-        trips.end_date
-      FROM trips
+      FROM activities
       WHERE activities.trip_id = ?
     `;
 
