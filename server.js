@@ -9,8 +9,13 @@ const weatherRoutes = require('./routes/weather'); // Import the weather module
 const app = express();
 const port = process.env.PORT || 8080;
 
-// Enable CORS for localhost:3000 only
-app.use(cors());
+// List of allowed origins (including ports)
+const allowedOrigins = ['http://localhost:3000', 'http://https://jtrapp18.github.io/wandr-personal-travel-journal'];
+
+// Configure CORS
+app.use(cors({
+  origin: allowedOrigins, // Only allow these origins
+}));
 app.use(express.json());
 
 // Mount routes

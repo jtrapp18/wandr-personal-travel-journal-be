@@ -4,13 +4,13 @@ const mysql = require('mysql2/promise');
 const router = express.Router();
 router.use(express.json());
 
+// Whitelist of allowed tables
+const allowedTables = ['users', 'activities', 'attendees', 'photos', 'trips'];
+
 // Database connection configuration from environment variables
 const dbConfig = {
   uri: process.env.MYSQL_URL, // Environment variable for database connection
 };
-
-// Whitelist of allowed tables
-const allowedTables = ['users', 'activities', 'attendees', 'photos', 'trips'];
 
 router.patch('/:dbKey/:id', async (req, res) => {
   const { dbKey, id } = req.params; // Extract table name and record ID from route params
@@ -23,8 +23,6 @@ router.patch('/:dbKey/:id', async (req, res) => {
   }
 
   let db;
-
-  
   try {
     // Establish database connection
     db = await mysql.createConnection(dbConfig.uri);
@@ -35,9 +33,8 @@ router.patch('/:dbKey/:id', async (req, res) => {
       .map((key) => `${key} = ?`)
       .join(', ');
 
-    const values = Object.values(fieldsToUpdate);
-
     // Build dynamic query
+    const values = Object.values(fieldsToUpdate);
     const query = `UPDATE ${dbKey} SET ${setString} WHERE id = ?`;
     values.push(id);
 
@@ -52,12 +49,13 @@ router.patch('/:dbKey/:id', async (req, res) => {
     }
 
     console.log('Update successful:', result);
-
     return res.status(200).json({ message: 'Record updated successfully', updatedFields: fieldsToUpdate });
-  } catch (error) {
+  }
+  catch (error) {
     console.error('Error running query:', error);
     return res.status(500).json({ error: 'Internal server error' });
-  } finally {
+  } 
+  finally {
     if (db) {
       await db.end();
     }

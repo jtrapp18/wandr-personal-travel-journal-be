@@ -13,7 +13,7 @@ router.get('/', async (req, res) => {
   const tripId = req.query.tripId; // Extract userId safely
 
   try {
-    // Create database connection
+    // Establish database connection
     db = await mysql.createConnection(dbConfig.uri);
 
     // Query string
@@ -31,10 +31,12 @@ router.get('/', async (req, res) => {
     const [rows] = await db.execute(sql, [tripId]);
 
     return res.status(200).json(rows);
-  } catch (error) {
+  } 
+  catch (error) {
     console.error('Database query error:', error);
     return res.status(500).json({ error: 'Internal Server Error' });
-  } finally {
+  } 
+  finally {
     if (db) {
       await db.end();
     }

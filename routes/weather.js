@@ -20,7 +20,8 @@ router.get('/', async (req, res) => {
     // Fetch the weather forecast
     const forecastRes = await axios.get(`http://dataservice.accuweather.com/forecasts/v1/daily/5day/${locationKey}?apikey=${apiKey}`);
     return res.status(200).json(forecastRes.data);
-  } catch (error) {
+  } 
+  catch (error) {
     console.error('Weather API error:', error.message);
     return res.status(500).json({ error: 'Failed to fetch weather data' });
   }
