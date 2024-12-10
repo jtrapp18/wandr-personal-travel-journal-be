@@ -45,7 +45,6 @@ router.post('/:dbKey', async (req, res) => {
 
     const query = `INSERT INTO ${dbKey} (${fields}) VALUES ${placeholders}`;
 
-
     console.log('Executing query:', { query, values });
 
     const [result] = await db.execute(query, values);
