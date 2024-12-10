@@ -55,7 +55,9 @@ router.post('/:dbKey', async (req, res) => {
       id: result.insertId + index, // Adjust for multiple rows
     }));
 
-    return res.status(200).json(insertedRows);
+    const returnVal = Array.isArray(jsonObj) ? insertedRows : insertedRows[0];
+
+    return res.status(200).json(returnVal);
   } catch (error) {
     console.error('Error during query execution:', error);
 
