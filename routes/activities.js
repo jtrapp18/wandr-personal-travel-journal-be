@@ -23,7 +23,7 @@ router.get('/', async (req, res) => {
         activities.trip_id,
         activities.activity,
         activities.activity_description,
-        activities.activity_date,
+        activities.activity_date
       FROM activities
       WHERE activities.trip_id = ?
     `;
