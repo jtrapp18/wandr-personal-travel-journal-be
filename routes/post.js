@@ -15,10 +15,6 @@ const allowedTables = ['users', 'activities', 'attendees', 'photos', 'trips'];
 router.post('/:dbKey', async (req, res) => {
   const { dbKey } = req.params;
   const jsonObj = req.body;
-
-  console.log('DB Key:', dbKey);
-  console.log('JSON body:', jsonObj);
-
   const jsonArr = Array.isArray(jsonObj) ? jsonObj : [jsonObj];
 
   // Validate database table key
@@ -53,7 +49,13 @@ router.post('/:dbKey', async (req, res) => {
 
     const [result] = await db.execute(query, values);
 
-    return res.status(200).json(result);
+    // For multiple rows, return all inserted rows with their respective insertIds
+    const insertedRows = jsonArr.map((item, index) => ({
+      ...item,
+      id: result.insertId + index, // Adjust for multiple rows
+    }));
+
+    return res.status(200).json(insertedRows);
   } catch (error) {
     console.error('Error during query execution:', error);
 
