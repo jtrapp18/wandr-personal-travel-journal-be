@@ -15,6 +15,10 @@ const allowedTables = ['users', 'activities', 'attendees', 'photos', 'trips'];
 router.post('/:dbKey', async (req, res) => {
   const { dbKey } = req.params;
   const jsonObj = req.body;
+
+  console.log('DB Key:', dbKey);
+  console.log('JSON body:', jsonObj);
+
   const jsonArr = Array.isArray(jsonObj) ? jsonObj : [jsonObj];
 
   // Validate database table key
