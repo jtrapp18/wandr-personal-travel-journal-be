@@ -1,5 +1,6 @@
 const express = require('express');
 const cors = require('cors');
+const userRoutes = require('./routes/users');
 const tripsRoutes = require('./routes/trips');
 const activitiesRoutes = require('./routes/activities');
 const postRoutes = require('./routes/post');
@@ -19,6 +20,7 @@ app.use(cors({
 app.use(express.json());
 
 // Mount routes
+app.use('/users', userRoutes);
 app.use('/trips', tripsRoutes);
 app.use('/activities', activitiesRoutes);
 app.use('/new', postRoutes);
