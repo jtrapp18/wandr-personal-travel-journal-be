@@ -14,9 +14,10 @@ const port = process.env.PORT || 8080;
 const allowedOrigins = ['http://localhost:3000', 'https://jtrapp18.github.io/wandr-personal-travel-journal'];
 
 // Configure CORS
-app.use(cors({
-  origin: allowedOrigins, // Only allow these origins
-}));
+// app.use(cors({
+//   origin: allowedOrigins, // Only allow these origins
+// }));
+app.use(cors())
 app.use(express.json());
 
 // Mount routes
